@@ -1,10 +1,7 @@
-# nmap-did-what
+# AJF Network Dashboard
 
-**nmap-did-what** is a Grafana docker container and a Python script to parse Nmap XML output to an SQLite database. The SQLite database is used as a datasource within Grafana to view the Nmap scan details in a dashboard.
+a Grafana docker container and a Python script to parse Nmap XML output to an SQLite database. The SQLite database is used as a datasource within Grafana to view the Nmap scan details in a dashboard.
 
-Full Tutorial is available here - [Nmap Dashboard using Grafana](https://hackertarget.com/nmap-dashboard-with-grafana/)
-
-![Grafana Dashboard](https://hackertarget.com/images/nmap-grafana-dashboard.webp)
 
 ## Overview
 
@@ -101,7 +98,7 @@ The systemd directory also contains service and timer files for automatically pa
 
 1. Move the parsing service file: `sudo cp systemd/nmap-parse.service /etc/systemd/system/`
 2. Move the parsing timer file: `sudo cp systemd/nmap-parse.timer /etc/systemd/system/`
-3. Update the path in `/etc/systemd/system/nmap-parse.service` - replace `/path/to/projects/nmap-did-what` with your actual project path
+3. Update the path in `/etc/systemd/system/nmap-parse.service` - replace `/path/to/projects/ajf-network-dash` with your actual project path
 4. The timer is configured to run daily at 00:15 (15 minutes after midnight), which allows time for the nmap scan to complete first
 
 **After creating these files, you need to enable and start both timers:**
@@ -138,19 +135,8 @@ Max kernel policy version:      33
 - Then you can set SELinux to permissive with `sudo setenforce 0` and try running the service again.
 - If the script proves to successfully run via Systemd, you can reenable SELinux if you'd like with `sudo setenforce 1`.
 - If SELinux is to continue to be enabled on the system, then you will need to define the context for what actions are allowed on files, particularly ones in your home directory.
-  - This is accomplished with a simple command `sudo chcon -t bin_t /path/to/nmap-did-what/run_nmap`
+  - This is accomplished with a simple command `sudo chown -t bin_t /path/to/ajf-network-dash/run_nmap`
   - However, this is not persistent across reboots. For this, run:
-    - `sudo semanage fcontext -a -t bin_t "/path/to/nmap-did-what/run_nmap"` ~> adding the file to context rules.
-    - `sudo restorecon -v /path/to/nmap-did-what/run_nmap` ~> applies these rules to the file.
-  - Confirm the context with `ls -Z /path/to/nmap-did-what/run_nmap`
-
-
-## Next Steps: Customization
-
-- Modify the `nmap-to-sqlite.py` script to extract additional information from the Nmap XML output or to change the structure of the SQLite database.
-- Custom Dashboard are easy to implement, simply adjust the Grafana dashboard to your requirements. Export the JSON of the Dashboard and replace the default Dashboard or create additional dashboard. The ability to spin up a Grafana Docker container with a prebuilt Dashboard is a nice feature.
-- Automation is possible, as you can simply run **nmap** with a cron job, parse the XML with **nmap-to-sqlite.py** and the updated DB will have the newly acquired scan information.
-
-## Credits
-
-Thanks to the Nmap and Grafana projects for providing powerful open-source tools for network scanning and data visualization.
+    - `sudo semanage fcontext -a -t bin_t "/path/to/ajf-network-dash/run_nmap"` ~> adding the file to context rules.
+    - `sudo restorecon -v /path/to/ajf-network-dash/run_nmap` ~> applies these rules to the file.
+  - Confirm the context with `ls -Z /path/to/ajf-network-dash/run_nmap`
