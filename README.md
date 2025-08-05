@@ -36,8 +36,8 @@ The project consists of two main components:
 1. **Clone the repository and cd into project**
 
 ```
-git clone https://github.com/hackertarget/nmap-did-what.git
-cd nmap-did-what
+git clone https://github.com/hackertarget/ajf-network-dashboard.git
+cd ajf-network-dashboard
 ```
 
 2. **Run Nmap**
@@ -63,7 +63,7 @@ Notes:
 Use Docker Compose to start the Grafana container:
 
 ```
-cd nmap-did-what
+cd grafana-docker
 docker-compose up -d
 ```
 
