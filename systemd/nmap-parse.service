@@ -1,0 +1,14 @@
+[Unit]
+Description=Parse Nmap XML to SQLite
+After=network.target nmap-scan.service
+Wants=nmap-scan.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /path/to/projects/nmap-did-what/src/nmap-to-sqlite.py
+WorkingDirectory=/path/to/projects/nmap-did-what
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

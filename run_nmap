@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+set -e
+
+subnet=${1:-192.168.1.1/24}
+scan_date=${2:-$(date +%Y-%m-%d)}
+
+echo "Subnet: $subnet"
+echo "Scan Date: $scan_date"
+
+# Ensure the data directory exists
+data_dir="nmap-data"
+mkdir -p "$data_dir"
+
+# Function to generate a unique filename
+generate_filename() {
+    local base_name="$data_dir/nmap-sV-F-output-$scan_date"
+    local file_name="$base_name"
+    local counter=1
+
+    while [[ -e "$file_name.xml" || -e "$file_name.nmap" || -e "$file_name.gnmap" ]]; do
+        file_name="${base_name}-$(date +%H-%M-%S)"
+        ((counter++))
+        if [[ $counter -gt 100 ]]; then
+            echo "Error: Unable to generate a unique filename" >&2
+            exit 1
+        fi
+    done
+
+    echo "$file_name"
+}
+
+# Check for automated run flag or environment variable
+if [[ "$3" == "--auto" || "$NMAP_AUTO_RUN" == "true" ]]; then
+    use_default=true
+else
+    # Prompt user for output file choice if not in auto mode
+    read -p "Would you like to use the default output of the nmap scan (nmap_output.xml)? [y/N] " user_choice
+    [[ $user_choice =~ ^[Yy]$ ]] && use_default=true || use_default=false
+fi
+if [[ $use_default == true ]]; then
+    output_file="$data_dir/nmap_output"
+else
+    output_file=$(generate_filename)
+fi
+
+echo "Output will be saved to: $output_file"
+
+nmap -sV -F --script=http-title,ssl-cert -oA "$output_file" "$subnet"

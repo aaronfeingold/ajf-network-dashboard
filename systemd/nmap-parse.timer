@@ -1,0 +1,10 @@
+[Unit]
+Description=Parse Nmap XML to SQLite Daily (10 minutes after nmap scan)
+
+[Timer]
+OnCalendar=*-*-* 00:15:00
+Persistent=true
+AccuracySec=1min
+
+[Install]
+WantedBy=timers.target
