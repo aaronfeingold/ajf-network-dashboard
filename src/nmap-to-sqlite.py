@@ -5,12 +5,43 @@ import sqlite3
 from datetime import datetime
 import argparse
 
-#
-# This script parses Nmap XML scan files and populates the results into an SQLite database.
-# It creates database tables for storing scan metadata, hosts, and port information.
-# The stored data can be used for further analysis or integration with dashboards,
-# such as the Nmap Grafana Dashboard - https://hackertarget.com/nmap-dashboard-with-grafana/
-#
+"""
+Nmap XML to SQLite Database Converter
+
+This module parses Nmap XML scan output files and imports the results into a structured SQLite database
+for analysis, reporting, and dashboard integration. It provides a complete pipeline for converting
+raw Nmap scan data into a queryable database format.
+
+Key Features:
+- Parses Nmap XML output files with comprehensive error handling
+- Creates normalized SQLite database schema with three main tables (scans, hosts, ports)
+- Extracts detailed host information including IP addresses, hostnames, and operating systems
+- Captures comprehensive port data including state, protocols, and service information
+- Processes Nmap script results (HTTP titles, SSL certificate details)
+- Handles timestamp conversion for time-series analysis and Grafana integration
+- Supports batch processing of multiple scan files
+
+Database Schema:
+- scans: Stores scan metadata (Nmap version, command line, timing, totals)
+- hosts: Stores discovered host information with port statistics
+- ports: Stores detailed port information with service detection results
+
+Typical Usage:
+    python nmap-to-sqlite.py --xml_file path/to/scan.xml --db_path path/to/database.db
+
+The resulting database is optimized for:
+- Network security analysis and reporting
+- Integration with Grafana dashboards for visualization
+- Historical scan comparison and trend analysis
+- Asset discovery and inventory management
+
+Dependencies:
+- xml.etree.ElementTree: XML parsing
+- sqlite3: Database operations
+- argparse: Command-line interface
+- datetime: Timestamp handling
+"""
+
 
 def parse_nmap_xml(xml_file):
     """
