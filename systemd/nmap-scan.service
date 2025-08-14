@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=oneshot
 Environment="NMAP_AUTO_RUN=true"
-ExecStart=/path/to/your/nmap_scan_script.sh
-WorkingDirectory=/path/to/projects/nmap-did-what
+ExecStart=/usr/local/bin/run_nmap
+WorkingDirectory=/path/to/projects/ajf-network-dash
 User=root
 Group=root
 

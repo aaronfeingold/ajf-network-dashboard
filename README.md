@@ -118,7 +118,13 @@ A few notes:
 - The Persistent=true setting ensures that if the system is off when the timer is supposed to run, it will run when the system next boots up.
 
 #### Troubleshooting Systemd
-- If the nmap bash script has 750 privileges (veryify with `stat <file name>`), but the logs from [journalctl](https://man7.org/linux/man-pages/man1/journalctl.1.html) read permission denied, check if SELinux is enabled with `sestatus`.
+- If the nmap bash script has 755 privileges (verify with `stat <file name>`), but the logs from [journalctl](https://man7.org/linux/man-pages/man1/journalctl.1.html) read permission denied, check if SELinux is enabled with `sestatus`.
+- **Alternative Solution**: Move the script to a system location to avoid SELinux home directory restrictions:
+  ```bash
+  sudo cp run_nmap /usr/local/bin/
+  sudo chmod 755 /usr/local/bin/run_nmap
+  ```
+  Then update your systemd service file to use `/usr/local/bin/run_nmap` instead of the home directory path.
 - If the output looks like:
 ```
 SELinux status:                 enabled
